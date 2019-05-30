@@ -132,6 +132,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account\LoginModel.cs" />
+    <Compile Include="Models\Account\RegisterModel.cs" />
+    <Compile Include="Models\Home\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -206,11 +209,16 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\LoginPage.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordPage.cshtml" />
+    <Content Include="Views\Account\RegisterPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Models\BankAccounts\" />
+    <Folder Include="Models\Category\" />
+    <Folder Include="Models\Households\" />
+    <Folder Include="Models\Transactions\" />
     <Folder Include="Views\BankAccounts\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Category\" />

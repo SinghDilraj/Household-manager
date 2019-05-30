@@ -10,6 +10,8 @@ namespace HouseholdManager.Controllers
         protected const string CategoryRoute = "Api/Category/";
         protected const string BankAccountRoute = "Api/BankAccount/";
         protected const string TransactionRoute = "Api/Transaction/";
+        protected const string AccountRoute = "Api/Account/";
+        protected const string TokenRoute = "Token";
 
         protected HttpClient HttpClient = new HttpClient();
     }

@@ -11,20 +11,20 @@
                     {
                         @Html.ValidationSummary(true)
                         <div class="form-label-group">
-                            @Html.LabelFor(p => p.Email, new { })
                             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            @Html.LabelFor(p => p.Email, new { })
                             @Html.TextBoxFor(p => p.Email, new { @class = "form-control", autofocus = true })
                         </div>
 
                         <div class="form-label-group mt-4">
-                            @Html.LabelFor(p => p.Password, new { })
                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            @Html.LabelFor(p => p.Password, new { })
                             @Html.PasswordFor(p => p.Password, new { @class = "form-control" })
                         </div>
 
                         <div class="form-label-group mt-4">
-                            @Html.LabelFor(p => p.ConfirmPassword, new { })
                             @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                            @Html.LabelFor(p => p.ConfirmPassword, new { })
                             @Html.PasswordFor(p => p.ConfirmPassword, new { @class = "form-control" })
                         </div>
 

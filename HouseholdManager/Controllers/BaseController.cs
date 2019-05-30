@@ -13,6 +13,8 @@ namespace HouseholdManager.Controllers
         protected const string AccountRoute = "Api/Account/";
         protected const string TokenRoute = "Token";
 
+        protected const string ControllerName = "Home";
+
         protected HttpClient HttpClient = new HttpClient();
     }
 }

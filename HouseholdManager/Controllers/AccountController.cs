@@ -1,6 +1,7 @@
 ﻿using HouseholdManager.Models.Account;
 using HouseholdManager.Models.Home;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -39,9 +40,13 @@ namespace HouseholdManager.Controllers
 
                     UserModel result = JsonConvert.DeserializeObject<UserModel>(data);
 
-                    HttpCookie cookie = new HttpCookie("Token", result.access_token);
+                    HttpCookie TokenCookie = new HttpCookie("Token", result.access_token);
 
-                    Response.Cookies.Add(cookie);
+                    Response.Cookies.Add(TokenCookie);
+
+                    HttpCookie UserNameCookie = new HttpCookie("UserName", result.UserName);
+
+                    Response.Cookies.Add(UserNameCookie);
 
                     return RedirectToAction(nameof(HomeController.Index), ControllerName);
                 }
@@ -75,7 +80,17 @@ namespace HouseholdManager.Controllers
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                Request.Cookies.Remove("Token");
+                HttpCookie TokenResetCookie = new HttpCookie("Token", null);
+
+                TokenResetCookie.Expires = DateTime.Now.AddDays(-1);
+
+                Response.Cookies.Add(TokenResetCookie);
+
+                HttpCookie UserNameResetCookie = new HttpCookie("UserName", null);
+
+                TokenResetCookie.Expires = DateTime.Now.AddDays(-1);
+
+                Response.Cookies.Add(UserNameResetCookie);
 
                 return RedirectToAction(nameof(HomeController.Index), ControllerName);
             }

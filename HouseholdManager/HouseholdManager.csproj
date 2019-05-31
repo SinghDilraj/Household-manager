@@ -136,7 +136,9 @@
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
+    <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Models\Home\UserModel.cs" />
+    <Compile Include="Models\Households\HouseholdViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
   </ItemGroup>
@@ -217,17 +219,17 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Households\Create.cshtml" />
+    <Content Include="Views\Households\GetHousehold.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\BankAccounts\" />
     <Folder Include="Models\Category\" />
-    <Folder Include="Models\Households\" />
     <Folder Include="Models\Transactions\" />
     <Folder Include="Views\BankAccounts\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Category\" />
-    <Folder Include="Views\Households\" />
     <Folder Include="Views\Transactions\" />
   </ItemGroup>
   <ItemGroup>

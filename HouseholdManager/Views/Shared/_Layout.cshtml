@@ -25,18 +25,17 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             @if (string.IsNullOrEmpty(Request.Cookies["Token"]?.Value))
                             {
-                                @if (string.IsNullOrEmpty(Request.Cookies["UserName"]?.Value))
-                                {
-                                    <div class="dropdown-header text-primary">@Request.Cookies["UserName"]?.Value</div>
-                                    <div class="dropdown-divider"></div>
-                                }
-
                                 @Html.ActionLink("Login", "Login", "Account", null, new { @class = "dropdown-item" })
                                 <div class="dropdown-divider"></div>
                                 @Html.ActionLink("Register", "Register", "Account", null, new { @class = "dropdown-item" })
                             }
                             else
                             {
+                                if (!string.IsNullOrEmpty(Request.Cookies["UserName"]?.Value))
+                                {
+                                    <div class="dropdown-header text-primary">@Request.Cookies["UserName"].Value.ToString()</div>
+                                    <div class="dropdown-divider"></div>
+                                }
                                 @Html.ActionLink("Change Password", "ChangePassword", "Account", null, new { @class = "dropdown-item" })
                                 <div class="dropdown-divider"></div>
                                 @Html.ActionLink("Logout", "Logout", "Account", null, new { @class = "dropdown-item" })

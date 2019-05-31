@@ -1,9 +1,10 @@
-﻿using HouseholdManager.Models.Account;
+﻿using HouseholdManager.Models;
+using HouseholdManager.Models.Account;
 using HouseholdManager.Models.Home;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
@@ -34,10 +35,10 @@ namespace HouseholdManager.Controllers
 
                 HttpResponseMessage response = HttpClient.PostAsync($"{ApiUrl}{TokenRoute}", encodedParameters).Result;
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string data = response.Content.ReadAsStringAsync().Result;
+                string data = response.Content.ReadAsStringAsync().Result;
 
+                if (response.IsSuccessStatusCode)
+                {
                     UserModel result = JsonConvert.DeserializeObject<UserModel>(data);
 
                     HttpCookie TokenCookie = new HttpCookie("Token", result.access_token);
@@ -48,17 +49,20 @@ namespace HouseholdManager.Controllers
 
                     Response.Cookies.Add(UserNameCookie);
 
-                    return RedirectToAction(nameof(HomeController.Index), ControllerName);
+                    return RedirectToAction(nameof(HomeController.Index), Home);
                 }
                 else
                 {
-                    ModelState.AddModelError("", response.ReasonPhrase);
-                    return View(nameof(AccountController.Login), formData);
+                    ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
+
+                    ModelState.AddModelError("", errorModel.Error_description);
+
+                    return View(formData);
                 }
             }
             else
             {
-                return View(nameof(AccountController.Login), formData);
+                return View(formData);
             }
         }
 
@@ -68,7 +72,7 @@ namespace HouseholdManager.Controllers
 
             if (cookie == null)
             {
-                return RedirectToAction(nameof(HomeController.Index), ControllerName);
+                return RedirectToAction(nameof(AccountController.Login));
             }
 
             string token = cookie.Value;
@@ -78,26 +82,26 @@ namespace HouseholdManager.Controllers
             HttpResponseMessage response = HttpClient.PostAsync($"{ApiUrl}{AccountRoute}Logout", null).Result;
 
 
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                HttpCookie TokenResetCookie = new HttpCookie("Token", null);
+            //if (response.IsSuccessStatusCode)
+            //{
+            HttpCookie TokenResetCookie = new HttpCookie("Token", null);
 
-                TokenResetCookie.Expires = DateTime.Now.AddDays(-1);
+            TokenResetCookie.Expires = DateTime.Now.AddDays(-1);
 
-                Response.Cookies.Add(TokenResetCookie);
+            Response.Cookies.Add(TokenResetCookie);
 
-                HttpCookie UserNameResetCookie = new HttpCookie("UserName", null);
+            HttpCookie UserNameResetCookie = new HttpCookie("UserName", null);
 
-                TokenResetCookie.Expires = DateTime.Now.AddDays(-1);
+            TokenResetCookie.Expires = DateTime.Now.AddDays(-1);
 
-                Response.Cookies.Add(UserNameResetCookie);
+            Response.Cookies.Add(UserNameResetCookie);
 
-                return RedirectToAction(nameof(HomeController.Index), ControllerName);
-            }
-            else
-            {
-                return RedirectToAction(nameof(HomeController.Index), ControllerName);
-            }
+            return RedirectToAction(nameof(AccountController.Login), "Account");
+            //}
+            //else
+            //{
+            //    return RedirectToAction(nameof(AccountController.Login), "Account");
+            //}
         }
 
         [HttpGet]
@@ -122,19 +126,39 @@ namespace HouseholdManager.Controllers
 
                 HttpResponseMessage response = HttpClient.PostAsync($"{ApiUrl}{AccountRoute}Register", encodedParameters).Result;
 
-                if (response.StatusCode == HttpStatusCode.OK)
+                string data = response.Content.ReadAsStringAsync().Result;
+
+                if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction(nameof(AccountController.Login));
                 }
                 else
                 {
-                    ModelState.AddModelError("", response.ReasonPhrase);
-                    return View(nameof(AccountController.Register), formData);
+                    ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
+
+                    ModelState.AddModelError("", errorModel.Message);
+                    ModelState.AddModelError("", errorModel.Error_description);
+
+                    if (errorModel.ModelState.Values.Any())
+                    {
+                        foreach (string[] value in errorModel.ModelState.Values)
+                        {
+                            if (value.Any())
+                            {
+                                foreach (string val in value)
+                                {
+                                    ModelState.AddModelError("", val);
+                                }
+                            }
+                        }
+                    }
+
+                    return View(formData);
                 }
             }
             else
             {
-                return View(nameof(AccountController.Register), formData);
+                return View(formData);
             }
         }
 
@@ -149,28 +173,40 @@ namespace HouseholdManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                //List<KeyValuePair<string, string>> parameters = new List<KeyValuePair<string, string>>
-                //{
-                //    new KeyValuePair<string, string>("userEmail", formData.Email)
-                //};
-
-                //FormUrlEncodedContent encodedParameters = new FormUrlEncodedContent(parameters);
-
                 HttpResponseMessage response = HttpClient.PostAsync($"{ApiUrl}{AccountRoute}ForgotPassword?userEmail={formData.Email}", null).Result;
 
-                if (response.StatusCode == HttpStatusCode.OK)
+                string data = response.Content.ReadAsStringAsync().Result;
+
+                if (response.IsSuccessStatusCode)
                 {
                     return View(nameof(AccountController.ResetPassword));
                 }
                 else
                 {
-                    ModelState.AddModelError("", response.ReasonPhrase);
-                    return View(nameof(AccountController.ForgotPassword), formData);
+                    ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
+
+                    ModelState.AddModelError("", errorModel.Message);
+                    ModelState.AddModelError("", errorModel.Error_description);
+
+                    if (errorModel.ModelState.Values.Any())
+                    {
+                        foreach (string[] value in errorModel.ModelState.Values)
+                        {
+                            if (value.Any())
+                            {
+                                foreach (string val in value)
+                                {
+                                    ModelState.AddModelError("", val);
+                                }
+                            }
+                        }
+                    }
+                    return View(formData);
                 }
             }
             else
             {
-                return View(nameof(AccountController.ForgotPassword), formData);
+                return View(formData);
             }
         }
 
@@ -198,19 +234,38 @@ namespace HouseholdManager.Controllers
 
                 HttpResponseMessage response = HttpClient.PostAsync($"{ApiUrl}{AccountRoute}ResetPassword", encodedParameters).Result;
 
-                if (response.StatusCode == HttpStatusCode.OK)
+                string data = response.Content.ReadAsStringAsync().Result;
+
+                if (response.IsSuccessStatusCode)
                 {
                     return View(nameof(AccountController.Login));
                 }
                 else
                 {
-                    ModelState.AddModelError("", response.ReasonPhrase);
-                    return View(nameof(AccountController.ResetPassword), formData);
+                    ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
+
+                    ModelState.AddModelError("", errorModel.Message);
+                    ModelState.AddModelError("", errorModel.Error_description);
+
+                    if (errorModel.ModelState.Values.Any())
+                    {
+                        foreach (string[] value in errorModel.ModelState.Values)
+                        {
+                            if (value.Any())
+                            {
+                                foreach (string val in value)
+                                {
+                                    ModelState.AddModelError("", val);
+                                }
+                            }
+                        }
+                    }
+                    return View(formData);
                 }
             }
             else
             {
-                return View(nameof(AccountController.ResetPassword), formData);
+                return View(formData);
             }
         }
 
@@ -247,19 +302,38 @@ namespace HouseholdManager.Controllers
 
                 HttpResponseMessage response = HttpClient.PostAsync($"{ApiUrl}{AccountRoute}ChangePassword", encodedParameters).Result;
 
-                if (response.StatusCode == HttpStatusCode.OK)
+                string data = response.Content.ReadAsStringAsync().Result;
+
+                if (response.IsSuccessStatusCode)
                 {
                     return View(nameof(AccountController.Login));
                 }
                 else
                 {
-                    ModelState.AddModelError("", response.ReasonPhrase);
-                    return View(nameof(AccountController.ChangePassword), formData);
+                    ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
+
+                    ModelState.AddModelError("", errorModel.Message);
+                    ModelState.AddModelError("", errorModel.Error_description);
+
+                    if (errorModel.ModelState.Values.Any())
+                    {
+                        foreach (string[] value in errorModel.ModelState.Values)
+                        {
+                            if (value.Any())
+                            {
+                                foreach (string val in value)
+                                {
+                                    ModelState.AddModelError("", val);
+                                }
+                            }
+                        }
+                    }
+                    return View(formData);
                 }
             }
             else
             {
-                return View(nameof(AccountController.ChangePassword), formData);
+                return View(formData);
             }
         }
     }

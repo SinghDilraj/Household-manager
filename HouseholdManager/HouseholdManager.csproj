@@ -136,6 +136,8 @@
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
+    <Compile Include="Models\Account\UserViewModel.cs" />
+    <Compile Include="Models\Category\CategoryViewModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Models\Home\UserModel.cs" />
     <Compile Include="Models\Households\HouseholdViewModel.cs" />
@@ -156,6 +158,9 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\datatables\dataTables.bootstrap4.min.css" />
+    <Content Include="Scripts\datatables\dataTables.bootstrap4.min.js" />
+    <Content Include="Scripts\datatables\jquery.dataTables.min.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -184,6 +189,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Js\HouseholdManager.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
@@ -221,11 +227,11 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Households\Create.cshtml" />
     <Content Include="Views\Households\GetHousehold.cshtml" />
+    <Content Include="Views\Households\GetAllHouseholds.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\BankAccounts\" />
-    <Folder Include="Models\Category\" />
     <Folder Include="Models\Transactions\" />
     <Folder Include="Views\BankAccounts\" />
     <Folder Include="Views\Base\" />

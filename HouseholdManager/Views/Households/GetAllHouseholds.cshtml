@@ -1,9 +1,9 @@
-﻿@model HouseholdViewModel
+﻿@model List<HouseholdViewModel>
 
 <div class="container">
     <div class="row">
         <div class="col-12 mx-auto text-center text-primary my-4">
-            <h1>Household</h1>
+            <h1>Households</h1>
             <hr />
         </div>
         <div class="col-12 my-3 mx-auto">
@@ -33,22 +33,25 @@
                             </tr>
                         </tfoot>
                         <tbody class="text-primary">
-                            <tr>
-                                <td>@Model.Name</td>
-                                <td>@Model.Description</td>
-                                <td>@Model.Created</td>
-                                @if (Model.Updated.HasValue)
-                                {
-                                    <td>@Model.Updated</td>
-                                }
-                                else
-                                {
-                                    <td>never</td>
-                                }
-                                <td>@Model.Owner.Email</td>
-                                <td>@Model.Members.Count()</td>
-                                <td>@Model.Categories.Count()</td>
-                            </tr>
+                            @foreach (var household in Model)
+                            {
+                                <tr>
+                                    <td>@household.Name</td>
+                                    <td>@household.Description</td>
+                                    <td>@household.Created</td>
+                                    @if (household.Updated.HasValue)
+                                    {
+                                        <td>@household.Updated</td>
+                                    }
+                                    else
+                                    {
+                                        <td>never</td>
+                                    }
+                                    <td>@household.Owner.Email</td>
+                                    <td>@household.Members.Count()</td>
+                                    <td>@household.Categories.Count()</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

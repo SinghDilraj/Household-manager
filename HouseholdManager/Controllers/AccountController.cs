@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
@@ -55,7 +56,14 @@ namespace HouseholdManager.Controllers
                 {
                     ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
 
-                    ModelState.AddModelError("", errorModel.Error_description);
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        ModelState.AddModelError("", errorModel?.Error_description);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", response.ReasonPhrase);
+                    }
 
                     return View(formData);
                 }
@@ -81,9 +89,6 @@ namespace HouseholdManager.Controllers
 
             HttpResponseMessage response = HttpClient.PostAsync($"{ApiUrl}{AccountRoute}Logout", null).Result;
 
-
-            //if (response.IsSuccessStatusCode)
-            //{
             HttpCookie TokenResetCookie = new HttpCookie("Token", null);
 
             TokenResetCookie.Expires = DateTime.Now.AddDays(-1);
@@ -96,12 +101,14 @@ namespace HouseholdManager.Controllers
 
             Response.Cookies.Add(UserNameResetCookie);
 
-            return RedirectToAction(nameof(AccountController.Login), "Account");
-            //}
-            //else
-            //{
-            //    return RedirectToAction(nameof(AccountController.Login), "Account");
-            //}
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(AccountController.Login), "Account");
+            }
+            else
+            {
+                return RedirectToAction(nameof(HomeController.Index), Home);
+            }
         }
 
         [HttpGet]
@@ -136,21 +143,31 @@ namespace HouseholdManager.Controllers
                 {
                     ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
 
-                    ModelState.AddModelError("", errorModel.Message);
-                    ModelState.AddModelError("", errorModel.Error_description);
-
-                    if (errorModel.ModelState.Values.Any())
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
-                        foreach (string[] value in errorModel.ModelState.Values)
+                        if (errorModel != null)
                         {
-                            if (value.Any())
+                            if (errorModel.ModelState != null)
                             {
-                                foreach (string val in value)
+                                if (errorModel.ModelState.Values.Any())
                                 {
-                                    ModelState.AddModelError("", val);
+                                    foreach (string[] value in errorModel.ModelState.Values)
+                                    {
+                                        if (value.Any())
+                                        {
+                                            foreach (string val in value)
+                                            {
+                                                ModelState.AddModelError("", val);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", response.ReasonPhrase);
                     }
 
                     return View(formData);
@@ -185,22 +202,37 @@ namespace HouseholdManager.Controllers
                 {
                     ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
 
-                    ModelState.AddModelError("", errorModel.Message);
-                    ModelState.AddModelError("", errorModel.Error_description);
-
-                    if (errorModel.ModelState.Values.Any())
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
-                        foreach (string[] value in errorModel.ModelState.Values)
+                        if (errorModel != null)
                         {
-                            if (value.Any())
+                            if (errorModel.ModelState != null)
                             {
-                                foreach (string val in value)
+                                if (errorModel.ModelState.Values.Any())
                                 {
-                                    ModelState.AddModelError("", val);
+                                    foreach (string[] value in errorModel.ModelState.Values)
+                                    {
+                                        if (value.Any())
+                                        {
+                                            foreach (string val in value)
+                                            {
+                                                ModelState.AddModelError("", val);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ModelState.AddModelError("", response.ReasonPhrase);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Email does not exist. Please try again.");
+                    }
+
                     return View(formData);
                 }
             }
@@ -244,22 +276,40 @@ namespace HouseholdManager.Controllers
                 {
                     ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
 
-                    ModelState.AddModelError("", errorModel.Message);
-                    ModelState.AddModelError("", errorModel.Error_description);
-
-                    if (errorModel.ModelState.Values.Any())
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
-                        foreach (string[] value in errorModel.ModelState.Values)
+                        ModelState.AddModelError("", errorModel?.Message);
+                        ModelState.AddModelError("", errorModel?.Error_description);
+
+                        if (errorModel != null)
                         {
-                            if (value.Any())
+                            if (errorModel.ModelState != null)
                             {
-                                foreach (string val in value)
+                                if (errorModel.ModelState.Values.Any())
                                 {
-                                    ModelState.AddModelError("", val);
+                                    foreach (string[] value in errorModel.ModelState.Values)
+                                    {
+                                        if (value.Any())
+                                        {
+                                            foreach (string val in value)
+                                            {
+                                                ModelState.AddModelError("", val);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ModelState.AddModelError("", "Code not valid. Please try again.");
+                    }
+                    else if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        ModelState.AddModelError("", "Email Address does not exist. Please try again.");
+                    }
+
                     return View(formData);
                 }
             }
@@ -306,28 +356,33 @@ namespace HouseholdManager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return View(nameof(AccountController.Login));
+                    return RedirectToAction(nameof(AccountController.Logout), "Account", null);
                 }
                 else
                 {
                     ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
 
-                    ModelState.AddModelError("", errorModel.Message);
-                    ModelState.AddModelError("", errorModel.Error_description);
-
-                    if (errorModel.ModelState.Values.Any())
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
-                        foreach (string[] value in errorModel.ModelState.Values)
+                        if (errorModel.ModelState.Values.Any())
                         {
-                            if (value.Any())
+                            foreach (string[] value in errorModel.ModelState.Values)
                             {
-                                foreach (string val in value)
+                                if (value.Any())
                                 {
-                                    ModelState.AddModelError("", val);
+                                    foreach (string val in value)
+                                    {
+                                        ModelState.AddModelError("", val);
+                                    }
                                 }
                             }
                         }
                     }
+                    else
+                    {
+                        ModelState.AddModelError("", response.ReasonPhrase);
+                    }
+
                     return View(formData);
                 }
             }

@@ -1,4 +1,4 @@
-﻿@model List<HouseholdViewModel>
+﻿@model List<HouseholdModel>
 
 <div class="container">
     <div class="row">
@@ -6,14 +6,13 @@
             <h1>Households</h1>
             <hr />
         </div>
-        <div class="col-12 my-3 mx-auto">
+        <div class="col-12 mx-auto">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped display" id="dataTable">
                         <thead class="thead-dark">
                             <tr>
                                 <th>Name</th>
-                                <th>Description</th>
                                 <th>Created</th>
                                 <th>Updated</th>
                                 <th>Owner</th>
@@ -24,7 +23,6 @@
                         <tfoot class="thead-dark">
                             <tr>
                                 <th>Name</th>
-                                <th>Description</th>
                                 <th>Created</th>
                                 <th>Updated</th>
                                 <th>Owner</th>
@@ -32,12 +30,11 @@
                                 <th>Categories</th>
                             </tr>
                         </tfoot>
-                        <tbody class="text-primary">
+                        <tbody>
                             @foreach (var household in Model)
                             {
                                 <tr>
-                                    <td>@household.Name</td>
-                                    <td>@household.Description</td>
+                                    <td><a class="text-info" href="@Url.Action("GetHousehold", "Households", new { id=household.Id})">@household.Name</a></td>
                                     <td>@household.Created</td>
                                     @if (household.Updated.HasValue)
                                     {

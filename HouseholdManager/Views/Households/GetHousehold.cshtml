@@ -1,4 +1,4 @@
-﻿@model HouseholdViewModel
+﻿@model HouseholdModel
 
 <div class="container">
     <div class="row">
@@ -6,14 +6,13 @@
             <h1>Household</h1>
             <hr />
         </div>
-        <div class="col-12 my-3 mx-auto">
+        <div class="col-12 mx-auto">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped display" id="dataTable">
+                    <table class="table table-bordered table-striped display">
                         <thead class="thead-dark">
                             <tr>
                                 <th>Name</th>
-                                <th>Description</th>
                                 <th>Created</th>
                                 <th>Updated</th>
                                 <th>Owner</th>
@@ -24,7 +23,6 @@
                         <tfoot class="thead-dark">
                             <tr>
                                 <th>Name</th>
-                                <th>Description</th>
                                 <th>Created</th>
                                 <th>Updated</th>
                                 <th>Owner</th>
@@ -35,7 +33,6 @@
                         <tbody class="text-primary">
                             <tr>
                                 <td>@Model.Name</td>
-                                <td>@Model.Description</td>
                                 <td>@Model.Created</td>
                                 @if (Model.Updated.HasValue)
                                 {
@@ -53,6 +50,64 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="col-8 my-1 mx-auto">
+
+            @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+            {
+                <div>
+                    @Html.ActionLink("Edit", "Edit", "Households", new { id = Model.Id }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Delete", "Delete", "Households", new { id = Model.Id }, new { @class = "btn btn-danger" })
+                </div>
+            }
+
+            <div class="my-2">
+                <h2>Description</h2>
+                <p>@Model.Description</p>
+            </div>
+        </div><div class="col-4 my-5 mx-auto">
+            <h2>Members</h2>
+            <ul class="list-unstyled">
+                <li class="media border-bottom border-top p-2">
+                    <div class="mr-3"><span class="fa fa-user-tie"></span></div>
+                    <div class="media-body">
+                        <p class="m-0 text-primary">@Model.Owner.Email  <small class=" text-warning">( Owner )</small></p>
+                    </div>
+                </li>
+                @foreach (var user in Model.Members)
+                {
+                    <li class="media border-bottom border-top p-2">
+                        <div class="mr-3"><span class="fas fa-user"></span></div>
+                        <div class="media-body">
+                            <p class="m-0 text-primary">@user.Email</p>
+                        </div>
+                    </li>
+                }
+                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                {
+                    <li>
+                        <a href="@Url.Action("InviteUser", "Households", new { id=Model.Id})" class="btn btn-primary">Invite User</a>
+                    </li>
+                }
+                @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
+                {
+                    <li>
+                        @using (Html.BeginForm("Leave", "Households", new { id = Model.Id }, FormMethod.Post))
+                        {
+                            <button class="btn btn-danger" type="submit">Leave</button>
+                        }
+                    </li>
+                }
+                else if (Model.Invitees.Any(p => p.Email != Request.Cookies["UserName"]?.Value))
+                {
+                    <li>
+                        @using (Html.BeginForm("Join", "Households", new { id = Model.Id }, FormMethod.Post))
+                        {
+                            <button class="btn btn-success" type="submit">Join</button>
+                        }
+                    </li>
+                }
+            </ul>
         </div>
     </div>
 </div>

@@ -140,7 +140,8 @@
     <Compile Include="Models\Category\CategoryViewModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Models\Home\UserModel.cs" />
-    <Compile Include="Models\Households\HouseholdViewModel.cs" />
+    <Compile Include="Models\Households\HouseholdModel.cs" />
+    <Compile Include="Models\Households\InviteUserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
   </ItemGroup>
@@ -228,6 +229,8 @@
     <Content Include="Views\Households\Create.cshtml" />
     <Content Include="Views\Households\GetHousehold.cshtml" />
     <Content Include="Views\Households\GetAllHouseholds.cshtml" />
+    <Content Include="Views\Households\Edit.cshtml" />
+    <Content Include="Views\Households\InviteUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

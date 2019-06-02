@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HouseholdManager.Models.Households
 {
-    public class HouseholdViewModel
+    public class HouseholdModel
     {
         public int Id { get; set; }
         [Required]
@@ -15,13 +15,15 @@ namespace HouseholdManager.Models.Households
         public string Description { get; set; }
         public UserViewModel Owner { get; set; }
         public List<UserViewModel> Members { get; set; }
+        public List<UserViewModel> Invitees { get; set; }
         public List<CategoryViewModel> Categories { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
 
-        public HouseholdViewModel()
+        public HouseholdModel()
         {
             Members = new List<UserViewModel>();
+            Invitees = new List<UserViewModel>();
             Categories = new List<CategoryViewModel>();
         }
     }

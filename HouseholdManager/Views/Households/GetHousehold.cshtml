@@ -69,19 +69,32 @@
             <h2>Members</h2>
             <ul class="list-unstyled">
                 <li class="media border-bottom border-top p-2">
-                    <div class="mr-3"><span class="fa fa-user-tie"></span></div>
+                    <div class="mr-3"><span class="fa fa-user-secret"></span></div>
                     <div class="media-body">
                         <p class="m-0 text-primary">@Model.Owner.Email  <small class=" text-warning">( Owner )</small></p>
                     </div>
                 </li>
-                @foreach (var user in Model.Members)
+                @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
                 {
-                    <li class="media border-bottom border-top p-2">
-                        <div class="mr-3"><span class="fas fa-user"></span></div>
-                        <div class="media-body">
-                            <p class="m-0 text-primary">@user.Email</p>
-                        </div>
-                    </li>
+                    foreach (var user in Model.Members)
+                    {
+                        <li class="media border-bottom border-top p-2">
+                            <div class="mr-3"><span class="fas fa-user-tie"></span></div>
+                            <div class="media-body">
+                                <p class="m-0 text-primary">@user.Email  <small class=" text-warning">( Member )</small></p>
+                            </div>
+                        </li>
+                    }
+
+                    foreach (var user in Model.Invitees)
+                    {
+                        <li class="media border-bottom border-top p-2">
+                            <div class="mr-3"><span class="fas fa-user"></span></div>
+                            <div class="media-body">
+                                <p class="m-0 text-primary">@user.Email  <small class=" text-warning">( Invitee )</small></p>
+                            </div>
+                        </li>
+                    }
                 }
                 @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
                 {

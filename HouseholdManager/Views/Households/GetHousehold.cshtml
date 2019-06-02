@@ -68,14 +68,14 @@
         </div><div class="col-4 my-5 mx-auto">
             <h2>Members</h2>
             <ul class="list-unstyled">
-                <li class="media border-bottom border-top p-2">
-                    <div class="mr-3"><span class="fa fa-user-secret"></span></div>
-                    <div class="media-body">
-                        <p class="m-0 text-primary">@Model.Owner.Email  <small class=" text-warning">( Owner )</small></p>
-                    </div>
-                </li>
                 @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
                 {
+                    <li class="media border-bottom border-top p-2">
+                        <div class="mr-3"><span class="fa fa-user-secret"></span></div>
+                        <div class="media-body">
+                            <p class="m-0 text-primary">@Model.Owner.Email  <small class=" text-warning">( Owner )</small></p>
+                        </div>
+                    </li>
                     foreach (var user in Model.Members)
                     {
                         <li class="media border-bottom border-top p-2">
@@ -96,25 +96,31 @@
                         </li>
                     }
                 }
-                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                else
                 {
                     <li>
+                        User Not Authorized To View.
+                    </li>
+                }
+                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                {
+                    <li class="my-2">
                         <a href="@Url.Action("InviteUser", "Households", new { id=Model.Id})" class="btn btn-primary">Invite User</a>
                     </li>
                 }
                 @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
                 {
                     <li>
-                        @using (Html.BeginForm("Leave", "Households", new { id = Model.Id }, FormMethod.Post))
+                        @using (Html.BeginForm("Leave", "Households", new { id = Model.Id }, FormMethod.Post, new { @class="my-2"}))
                         {
                             <button class="btn btn-danger" type="submit">Leave</button>
                         }
                     </li>
                 }
-                else if (Model.Invitees.Any(p => p.Email != Request.Cookies["UserName"]?.Value))
+                else if (Model.Invitees.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
                 {
                     <li>
-                        @using (Html.BeginForm("Join", "Households", new { id = Model.Id }, FormMethod.Post))
+                        @using (Html.BeginForm("Join", "Households", new { id = Model.Id }, FormMethod.Post, new { @class="my-2"}))
                         {
                             <button class="btn btn-success" type="submit">Join</button>
                         }

@@ -149,16 +149,13 @@ namespace HouseholdManager.Controllers
                         {
                             if (errorModel.ModelState != null)
                             {
-                                if (errorModel.ModelState.Values.Any())
+                                foreach (KeyValuePair<string, string[]> pair in errorModel.ModelState)
                                 {
-                                    foreach (string[] value in errorModel.ModelState.Values)
+                                    if (pair.Value.Any())
                                     {
-                                        if (value.Any())
+                                        foreach (string val in pair.Value)
                                         {
-                                            foreach (string val in value)
-                                            {
-                                                ModelState.AddModelError("", val);
-                                            }
+                                            ModelState.AddModelError(pair.Key, val);
                                         }
                                     }
                                 }
@@ -208,16 +205,13 @@ namespace HouseholdManager.Controllers
                         {
                             if (errorModel.ModelState != null)
                             {
-                                if (errorModel.ModelState.Values.Any())
+                                foreach (KeyValuePair<string, string[]> pair in errorModel.ModelState)
                                 {
-                                    foreach (string[] value in errorModel.ModelState.Values)
+                                    if (pair.Value.Any())
                                     {
-                                        if (value.Any())
+                                        foreach (string val in pair.Value)
                                         {
-                                            foreach (string val in value)
-                                            {
-                                                ModelState.AddModelError("", val);
-                                            }
+                                            ModelState.AddModelError(pair.Key, val);
                                         }
                                     }
                                 }
@@ -285,16 +279,13 @@ namespace HouseholdManager.Controllers
                         {
                             if (errorModel.ModelState != null)
                             {
-                                if (errorModel.ModelState.Values.Any())
+                                foreach (KeyValuePair<string, string[]> pair in errorModel.ModelState)
                                 {
-                                    foreach (string[] value in errorModel.ModelState.Values)
+                                    if (pair.Value.Any())
                                     {
-                                        if (value.Any())
+                                        foreach (string val in pair.Value)
                                         {
-                                            foreach (string val in value)
-                                            {
-                                                ModelState.AddModelError("", val);
-                                            }
+                                            ModelState.AddModelError(pair.Key, val);
                                         }
                                     }
                                 }
@@ -364,15 +355,18 @@ namespace HouseholdManager.Controllers
 
                     if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
-                        if (errorModel.ModelState.Values.Any())
+                        if (errorModel != null)
                         {
-                            foreach (string[] value in errorModel.ModelState.Values)
+                            if (errorModel.ModelState != null)
                             {
-                                if (value.Any())
+                                foreach (KeyValuePair<string, string[]> pair in errorModel.ModelState)
                                 {
-                                    foreach (string val in value)
+                                    if (pair.Value.Any())
                                     {
-                                        ModelState.AddModelError("", val);
+                                        foreach (string val in pair.Value)
+                                        {
+                                            ModelState.AddModelError(pair.Key, val);
+                                        }
                                     }
                                 }
                             }

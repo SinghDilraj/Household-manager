@@ -279,16 +279,13 @@ namespace HouseholdManager.Controllers
                     {
                         if (errorModel.ModelState != null)
                         {
-                            if (errorModel.ModelState.Values.Any())
+                            foreach (KeyValuePair<string, string[]> pair in errorModel.ModelState)
                             {
-                                foreach (string[] value in errorModel.ModelState.Values)
+                                if (pair.Value.Any())
                                 {
-                                    if (value.Any())
+                                    foreach (string val in pair.Value)
                                     {
-                                        foreach (string val in value)
-                                        {
-                                            ModelState.AddModelError("", val);
-                                        }
+                                        ModelState.AddModelError(pair.Key, val);
                                     }
                                 }
                             }

@@ -42,7 +42,7 @@ namespace HouseholdManager.Controllers
                 {
                     UserModel result = JsonConvert.DeserializeObject<UserModel>(data);
 
-                    HttpCookie TokenCookie = new HttpCookie("Token", result.access_token);
+                    HttpCookie TokenCookie = new HttpCookie("Token", result.AccessToken);
 
                     Response.Cookies.Add(TokenCookie);
 
@@ -58,7 +58,7 @@ namespace HouseholdManager.Controllers
 
                     if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
-                        ModelState.AddModelError("", errorModel?.Error_description);
+                        ModelState.AddModelError("", errorModel?.ErrorDescription);
                     }
                     else
                     {
@@ -273,7 +273,7 @@ namespace HouseholdManager.Controllers
                     if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         ModelState.AddModelError("", errorModel?.Message);
-                        ModelState.AddModelError("", errorModel?.Error_description);
+                        ModelState.AddModelError("", errorModel?.ErrorDescription);
 
                         if (errorModel != null)
                         {

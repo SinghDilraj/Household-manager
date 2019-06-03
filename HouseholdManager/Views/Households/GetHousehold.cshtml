@@ -113,7 +113,7 @@
                     <li>
                         @using (Html.BeginForm("Leave", "Households", new { id = Model.Id }, FormMethod.Post, new { @class="my-2"}))
                         {
-                            <button class="btn btn-danger" type="submit">Leave</button>
+                            <button class="btn btn-danger" type="submit">Leave Household</button>
                         }
                     </li>
                 }
@@ -122,7 +122,7 @@
                     <li>
                         @using (Html.BeginForm("Join", "Households", new { id = Model.Id }, FormMethod.Post, new { @class="my-2"}))
                         {
-                            <button class="btn btn-success" type="submit">Join</button>
+                            <button class="btn btn-success" type="submit">Join Household</button>
                         }
                     </li>
                 }

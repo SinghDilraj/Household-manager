@@ -69,6 +69,13 @@ namespace HouseholdManager.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            HttpCookie cookie = Request.Cookies["Token"];
+
+            if (cookie == null)
+            {
+                return RedirectToAction(nameof(AccountController.Login), "Account");
+            }
+
             return View();
         }
 
@@ -224,6 +231,13 @@ namespace HouseholdManager.Controllers
         [HttpGet]
         public ActionResult InviteUser(int? id)
         {
+            HttpCookie cookie = Request.Cookies["Token"];
+
+            if (cookie == null)
+            {
+                return RedirectToAction(nameof(AccountController.Login), "Account");
+            }
+
             if (id.HasValue)
             {
                 InviteUserModel model = new InviteUserModel

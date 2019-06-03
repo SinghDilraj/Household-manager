@@ -191,44 +191,7 @@ namespace HouseholdManager.Controllers
 
                 string data = response.Content.ReadAsStringAsync().Result;
 
-                if (response.IsSuccessStatusCode)
-                {
-                    return View(nameof(AccountController.ResetPassword));
-                }
-                else
-                {
-                    ErrorModel errorModel = JsonConvert.DeserializeObject<ErrorModel>(data);
-
-                    if (response.StatusCode == HttpStatusCode.BadRequest)
-                    {
-                        if (errorModel != null)
-                        {
-                            if (errorModel.ModelState != null)
-                            {
-                                foreach (KeyValuePair<string, string[]> pair in errorModel.ModelState)
-                                {
-                                    if (pair.Value.Any())
-                                    {
-                                        foreach (string val in pair.Value)
-                                        {
-                                            ModelState.AddModelError(pair.Key, val);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        ModelState.AddModelError("", response.ReasonPhrase);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Email does not exist. Please try again.");
-                    }
-
-                    return View(formData);
-                }
+                return View(nameof(AccountController.ResetPassword));
             }
             else
             {

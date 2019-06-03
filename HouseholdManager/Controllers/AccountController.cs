@@ -313,6 +313,13 @@ namespace HouseholdManager.Controllers
         [HttpGet]
         public ActionResult ChangePassword()
         {
+            HttpCookie cookie = Request.Cookies["Token"];
+
+            if (cookie == null)
+            {
+                return RedirectToAction(nameof(AccountController.Login));
+            }
+
             return View();
         }
 

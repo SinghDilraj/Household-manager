@@ -1,4 +1,5 @@
 ﻿using HouseholdManager.Models.Account;
+using HouseholdManager.Models.BankAccounts;
 using HouseholdManager.Models.Category;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,8 @@ namespace HouseholdManager.Models.Households
         public UserViewModel Owner { get; set; }
         public List<UserViewModel> Members { get; set; }
         public List<UserViewModel> Invitees { get; set; }
-        public List<CategoryViewModel> Categories { get; set; }
+        public List<CategoryModel> Categories { get; set; }
+        public List<BankAccountModel> BankAccounts { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
 
@@ -24,7 +26,8 @@ namespace HouseholdManager.Models.Households
         {
             Members = new List<UserViewModel>();
             Invitees = new List<UserViewModel>();
-            Categories = new List<CategoryViewModel>();
+            Categories = new List<CategoryModel>();
+            BankAccounts = new List<BankAccountModel>();
         }
     }
 }

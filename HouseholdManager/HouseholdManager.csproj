@@ -137,11 +137,13 @@
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
     <Compile Include="Models\Account\UserViewModel.cs" />
-    <Compile Include="Models\Category\CategoryViewModel.cs" />
+    <Compile Include="Models\BankAccounts\BankAccountModel.cs" />
+    <Compile Include="Models\Category\CategoryModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Models\Home\UserModel.cs" />
     <Compile Include="Models\Households\HouseholdModel.cs" />
     <Compile Include="Models\Households\InviteUserModel.cs" />
+    <Compile Include="Models\Transactions\TransactionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
   </ItemGroup>
@@ -234,8 +236,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\BankAccounts\" />
-    <Folder Include="Models\Transactions\" />
     <Folder Include="Views\BankAccounts\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Category\" />

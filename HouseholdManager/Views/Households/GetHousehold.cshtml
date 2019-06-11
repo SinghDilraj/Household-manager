@@ -18,6 +18,7 @@
                                 <th>Owner</th>
                                 <th>Members</th>
                                 <th>Categories</th>
+                                <th>Bank Accounts</th>
                             </tr>
                         </thead>
                         <tfoot class="thead-dark">
@@ -28,6 +29,7 @@
                                 <th>Owner</th>
                                 <th>Members</th>
                                 <th>Categories</th>
+                                <th>Bank Accounts</th>
                             </tr>
                         </tfoot>
                         <tbody class="text-primary">
@@ -45,88 +47,115 @@
                                 <td>@Model.Owner.Email</td>
                                 <td>@Model.Members.Count()</td>
                                 <td>@Model.Categories.Count()</td>
+                                <td>@Model.BankAccounts.Count()</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="col-8 my-1 mx-auto">
-
+        <div class="col-3 my-1 mx-auto border-left border-right small">
             @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
             {
-                <div>
-                    @Html.ActionLink("Edit", "Edit", "Households", new { id = Model.Id }, new { @class = "btn btn-warning" })
-                    @Html.ActionLink("Delete", "Delete", "Households", new { id = Model.Id }, new { @class = "btn btn-danger" })
-                </div>
+                @Html.ActionLink("Edit Household", "Edit", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-warning mx-1" })
+                @Html.ActionLink("Delete Household", "Delete", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-danger" })
             }
-
             <div class="my-2">
                 <h2>Description</h2>
                 <p>@Model.Description</p>
             </div>
-        </div><div class="col-4 my-5 mx-auto">
-            <h2>Members</h2>
-            <ul class="list-unstyled">
-                @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-                {
-                    <li class="media border-bottom border-top p-2">
-                        <div class="mr-3"><span class="fa fa-user-secret"></span></div>
-                        <div class="media-body">
-                            <p class="m-0 text-primary">@Model.Owner.Email  <small class=" text-warning">( Owner )</small></p>
-                        </div>
-                    </li>
-                    foreach (var user in Model.Members)
-                    {
-                        <li class="media border-bottom border-top p-2">
-                            <div class="mr-3"><span class="fas fa-user-tie"></span></div>
-                            <div class="media-body">
-                                <p class="m-0 text-primary">@user.Email  <small class=" text-warning">( Member )</small></p>
-                            </div>
-                        </li>
-                    }
+        </div>
+        <div class="col-3 my-1 mx-auto border-left border-right small">
+            @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+            {
+                @Html.ActionLink("Invite User", "InviteUser", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-primary" })
+            }
 
-                    foreach (var user in Model.Invitees)
+            @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
+            {
+                @Html.ActionLink("Leave Household", "Leave", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-danger" })
+            }
+            else if (Model.Invitees.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
+            {
+                @Html.ActionLink("Join Household", "Join", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
+            }
+            <div class="my-2">
+                <h2>Members</h2>
+                <ul class="list-unstyled">
+                    @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
                     {
                         <li class="media border-bottom border-top p-2">
-                            <div class="mr-3"><span class="fas fa-user"></span></div>
+                            <div class="mr-3"><span class="fa fa-user-secret"></span></div>
                             <div class="media-body">
-                                <p class="m-0 text-primary">@user.Email  <small class=" text-warning">( Invitee )</small></p>
+                                <p class="m-0 text-primary">@Model.Owner.Email  <small class=" text-warning">( Owner )</small></p>
+                            </div>
+                        </li>
+                        foreach (var user in Model.Members)
+                        {
+                            <li class="media border-bottom border-top p-2">
+                                <div class="mr-3"><span class="fas fa-user-tie"></span></div>
+                                <div class="media-body">
+                                    <p class="m-0 text-primary">@user.Email  <small class=" text-warning">( Member )</small></p>
+                                </div>
+                            </li>
+                        }
+
+                        foreach (var user in Model.Invitees)
+                        {
+                            <li class="media border-bottom border-top p-2">
+                                <div class="mr-3"><span class="fas fa-user"></span></div>
+                                <div class="media-body">
+                                    <p class="m-0 text-primary">@user.Email  <small class=" text-warning">( Invitee )</small></p>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li>
+                            User Not Authorized To View.
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-3 my-1 mx-auto border-left border-right small">
+            @Html.ActionLink("Create Category", "Join", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
+            <div class="my-2">
+                <h2>Categories</h2>
+                <ul class="list-unstyled">
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <li class="media border-bottom border-top p-2">
+                            @cat.Name
+                            <div class="media-body">
+                                @Html.ActionLink("Edit", "Edit", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
+                                @Html.ActionLink("Delete", "Delete", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-danger" })
                             </div>
                         </li>
                     }
-                }
-                else
-                {
-                    <li>
-                        User Not Authorized To View.
-                    </li>
-                }
-                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-                {
-                    <li class="my-2">
-                        <a href="@Url.Action("InviteUser", "Households", new { id=Model.Id})" class="btn btn-primary">Invite a User</a>
-                    </li>
-                }
-                @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
-                {
-                    <li>
-                        @using (Html.BeginForm("Leave", "Households", new { id = Model.Id }, FormMethod.Post, new { @class="my-2"}))
-                        {
-                            <button class="btn btn-danger" type="submit">Leave Household</button>
-                        }
-                    </li>
-                }
-                else if (Model.Invitees.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
-                {
-                    <li>
-                        @using (Html.BeginForm("Join", "Households", new { id = Model.Id }, FormMethod.Post, new { @class="my-2"}))
-                        {
-                            <button class="btn btn-success" type="submit">Join Household</button>
-                        }
-                    </li>
-                }
-            </ul>
+                </ul>
+            </div>
+        </div>
+        <div class="col-3 my-1 mx-auto border-left border-right small">
+            <span class="text-info mx-1" >$ @Model.BankAccounts.Sum(p => p.Balance)</span>
+            @Html.ActionLink("Create Account", "Create", "BankAccounts", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
+            <div class="my-2">
+                <h2>Bank Accounts</h2>
+                <ul class="list-unstyled">
+                    @foreach (var ba in Model.BankAccounts)
+                    {
+                        <li class="media border-bottom border-top p-2">
+                            @ba.Name
+                            <small class="ml-2">@ba.Balance</small>
+                            <div class="media-body">
+                                @Html.ActionLink("Edit", "Edit", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
+                                @Html.ActionLink("Delete", "Delete", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-danger" })
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
         </div>
     </div>
 </div>

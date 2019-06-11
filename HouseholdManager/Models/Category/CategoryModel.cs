@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HouseholdManager.Models.Category
 {
-    public class CategoryViewModel
+    public class CategoryModel
     {
         public int Id { get; set; }
         [Required]

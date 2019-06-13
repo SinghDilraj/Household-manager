@@ -162,7 +162,7 @@ namespace HouseholdManager.Controllers
 
                 FormUrlEncodedContent encodedParameters = new FormUrlEncodedContent(parameters);
 
-                HttpResponseMessage response = HttpClient.PutAsync($"{ApiUrl}{CategoryRoute}", encodedParameters).Result;
+                HttpResponseMessage response = HttpClient.PutAsync($"{ApiUrl}{CategoryRoute}{formData.Id}", encodedParameters).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -204,6 +204,43 @@ namespace HouseholdManager.Controllers
             else
             {
                 return View(ModelState);
+            }
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if (id.HasValue)
+            {
+                HttpCookie cookie = Request.Cookies["Token"];
+
+                if (cookie == null)
+                {
+                    return RedirectToAction(nameof(AccountController.Login), "Account");
+                }
+
+                string token = cookie.Value;
+
+                HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
+
+                HttpResponseMessage response = HttpClient.DeleteAsync($"{ApiUrl}{CategoryRoute}{id}").Result;
+
+                string data = response.Content.ReadAsStringAsync().Result;
+
+                CategoryModel model = JsonConvert.DeserializeObject<CategoryModel>(data);
+
+                if (response.IsSuccessStatusCode)
+                {
+
+                    return RedirectToAction(nameof(HouseholdsController.GetHousehold), "Households", new { id = model.HouseholdId });
+                }
+                else
+                {
+                    return RedirectToAction(nameof(HouseholdsController.GetHousehold), "Households", new { id = model.HouseholdId });
+                }
+            }
+            else
+            {
+                return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds), "Households");
             }
         }
     }

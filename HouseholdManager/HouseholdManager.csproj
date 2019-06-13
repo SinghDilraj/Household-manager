@@ -235,6 +235,7 @@
     <Content Include="Views\Households\Edit.cshtml" />
     <Content Include="Views\Households\InviteUser.cshtml" />
     <Content Include="Views\Category\Create.cshtml" />
+    <Content Include="Views\Category\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

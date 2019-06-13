@@ -222,11 +222,13 @@ namespace HouseholdManager.Controllers
 
                 HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
 
-                HttpResponseMessage response = HttpClient.DeleteAsync($"{ApiUrl}{CategoryRoute}{id}").Result;
+                HttpResponseMessage modelResponse = HttpClient.GetAsync($"{ApiUrl}{CategoryRoute}{id}").Result;
 
-                string data = response.Content.ReadAsStringAsync().Result;
+                string data = modelResponse.Content.ReadAsStringAsync().Result;
 
                 CategoryModel model = JsonConvert.DeserializeObject<CategoryModel>(data);
+
+                HttpResponseMessage response = HttpClient.DeleteAsync($"{ApiUrl}{CategoryRoute}{id}").Result;
 
                 if (response.IsSuccessStatusCode)
                 {

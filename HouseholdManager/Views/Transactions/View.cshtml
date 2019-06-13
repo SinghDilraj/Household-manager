@@ -6,10 +6,7 @@
             <hr />
         </div>
         <div class="col-12 mx-auto">
-            @if (ViewBag.IsOwner)
-            {
-                @Html.ActionLink("Create", "Create", "Transactions", new { bankAccountId = Model.BankAccountId, HouseholdId = Model.Category.HouseholdId }, new { @class = "btn btn-success" })
-            }
+            @Html.ActionLink("Create", "Create", "Transactions", new { bankAccountId = Model.BankAccountId, HouseholdId = Model.Category.HouseholdId }, new { @class = "btn btn-success" })
         </div>
         <div class="col-6 mx-auto">
             <div class="card-body">
@@ -60,11 +57,13 @@
             </div>
         </div>
         <div class="col-12 my-3">
-            @if (ViewBag.IsOwner)
+            
+            @if (ViewBag.IsAllowed)
             {
                 @Html.ActionLink("Edit", "Edit", "Transactions", new { id = Model.Id }, new { @class = "btn btn-warning ml-3 mr-1" })
                 @Html.ActionLink("Delete", "Delete", "Transactions", new { id = Model.Id }, new { @class = "btn btn-danger" })
             }
+
             <h2 class="my-4 text-info">Description</h2>
             <p>@Model.Description</p>
         </div>

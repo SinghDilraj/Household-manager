@@ -1,5 +1,6 @@
 ﻿using HouseholdManager.Models;
 using HouseholdManager.Models.Category;
+using HouseholdManager.Models.Households;
 using HouseholdManager.Models.Transactions;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -16,7 +17,62 @@ namespace HouseholdManager.Controllers
         [HttpGet]
         public ActionResult View(int? id)
         {
-            return View();
+            if (id.HasValue)
+            {
+                HttpCookie cookie = Request.Cookies["Token"];
+
+                if (cookie == null)
+                {
+                    return RedirectToAction(nameof(AccountController.Login), "Account");
+                }
+
+                string token = cookie.Value;
+
+                HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
+
+                HttpResponseMessage response = HttpClient.GetAsync($"{ApiUrl}{TransactionRoute}{id}").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = response.Content.ReadAsStringAsync().Result;
+
+                    TransactionModel model = JsonConvert.DeserializeObject<TransactionModel>(data);
+
+                    HttpResponseMessage Usersresponse = HttpClient.GetAsync($"{ApiUrl}{HouseholdRoute}Users/{model.Category.HouseholdId}").Result;
+
+                    string UsersData = Usersresponse.Content.ReadAsStringAsync().Result;
+
+                    HouseholdMembersModel UsersModel = JsonConvert.DeserializeObject<HouseholdMembersModel>(UsersData);
+
+                    HttpCookie UserNameCookie = Request.Cookies["UserName"];
+
+                    if (UserNameCookie == null)
+                    {
+                        return RedirectToAction(nameof(AccountController.Login), "Account");
+                    }
+
+                    string UserNameToken = UserNameCookie.Value;
+
+                    if (UsersModel.Members.Any(m => m.Email == UserNameToken) || UsersModel.Owner.Email == UserNameToken)
+                    {
+                        ViewBag.IsAllowed = true;
+                    }
+                    else
+                    {
+                        ViewBag.IsAllowed = false;
+                    }
+
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds), "Households");
+                }
+            }
+            else
+            {
+                return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds), "Households");
+            }
         }
 
         [HttpGet]

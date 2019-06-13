@@ -88,7 +88,7 @@
                             @foreach (var tr in Model.Transactions)
                             {
                                 <tr>
-                                    <td>@Html.ActionLink(tr.Title, "View", "Transactions", new { id = tr.Id}, new { @class="text-danger"})</td>
+                                    <td>@Html.ActionLink(tr.Title, "View", "Transactions", new { id = tr.Id }, new { @class = "text-danger" })</td>
                                     <td>@tr.Amount</td>
                                     <td>@tr.Created</td>
                                 </tr>

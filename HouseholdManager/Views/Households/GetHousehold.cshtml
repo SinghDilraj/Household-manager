@@ -157,8 +157,8 @@
                                 <div class="media-body">
                                     @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
                                     {
-                                        @Html.ActionLink("Edit", "Edit", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
-                                        @Html.ActionLink("Delete", "Delete", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-danger" })
+                                        @Html.ActionLink("Edit", "Edit", "BankAccounts", new { id = ba.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
+                                        @Html.ActionLink("Delete", "Delete", "BankAccounts", new { id = ba.Id }, new { @class = "btn-sm btn-danger" })
                                     }
                                 </div>
                                 <div>

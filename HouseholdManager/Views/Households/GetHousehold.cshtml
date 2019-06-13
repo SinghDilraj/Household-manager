@@ -6,19 +6,15 @@
             <h1>Household</h1>
             <hr />
         </div>
-        <div class="col-12 mx-auto">
+        <div class="col-6 mx-auto">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped display">
+                    <table class="table table-responsive table-bordered table-striped display">
                         <thead class="thead-dark">
                             <tr>
                                 <th>Name</th>
                                 <th>Created</th>
                                 <th>Updated</th>
-                                <th>Owner</th>
-                                <th>Members</th>
-                                <th>Categories</th>
-                                <th>Bank Accounts</th>
                             </tr>
                         </thead>
                         <tfoot class="thead-dark">
@@ -26,10 +22,6 @@
                                 <th>Name</th>
                                 <th>Created</th>
                                 <th>Updated</th>
-                                <th>Owner</th>
-                                <th>Members</th>
-                                <th>Categories</th>
-                                <th>Bank Accounts</th>
                             </tr>
                         </tfoot>
                         <tbody class="text-primary">
@@ -44,134 +36,143 @@
                                 {
                                     <td>never</td>
                                 }
-                                <td>@Model.Owner.Email</td>
-                                <td>@Model.Members.Count()</td>
-                                <td>@Model.Categories.Count()</td>
-                                <td>@Model.BankAccounts.Count()</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="col-3 my-1 mx-auto border-left border-right small">
-            @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+
+        <div class="col-6 my-4 mx-auto">
+            @if (Request.Cookies["UserName"]?.Value == Model.OwnerEmail)
             {
                 @Html.ActionLink("Edit Household", "Edit", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-warning mx-1" })
                 @Html.ActionLink("Delete Household", "Delete", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-danger" })
             }
-            <div class="my-2">
-                <h2>Description</h2>
-                <p>@Model.Description</p>
-            </div>
+
+            <h2>Description</h2>
+            <p>@Model.Description</p>
         </div>
-        <div class="col-3 my-1 mx-auto border-left border-right small">
-            @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+
+        <div class="col-6 my-1 mx-auto">
+            @Html.Action("Members", "Households", new { Id = Model.Id })
+        </div>
+
+        <div class="col-6 my-1 mx-auto">
+            @if (Request.Cookies["UserName"]?.Value == Model.OwnerEmail)
             {
-                @Html.ActionLink("Invite User", "InviteUser", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-primary" })
+                @Html.ActionLink("Create Category", "Join", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
             }
 
-            @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
-            {
-                @Html.ActionLink("Leave Household", "Leave", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-danger" })
-            }
-            else if (Model.Invitees.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
-            {
-                @Html.ActionLink("Join Household", "Join", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
-            }
+            @Html.Action("Categories", "Households", new { Id = Model.Id })
+        </div>
+
+        @*<div class="col-12 my-1 mx-auto">
+                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                {
+                    @Html.ActionLink("Create Category", "Join", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
+                }
+                <div class="my-2">
+                    <h2>Categories</h2>
+                    <ul class="list-unstyled">
+                        @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                        {
+                            foreach (var cat in Model.Categories)
+                            {
+                                <li class="media border-bottom border-top p-2">
+                                    @cat.Name
+                                    <div class="media-body">
+                                        @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                                        {
+                                            @Html.ActionLink("Edit", "Edit", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
+                                            @Html.ActionLink("Delete", "Delete", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-danger" })
+                                        }
+                                    </div>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li>
+                                User Not Authorized To View.
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>*@<div class="col-12 my-1 mx-auto">
             <div class="my-2">
-                <h2>Members</h2>
+                <h2></h2>
                 <ul class="list-unstyled">
-                    @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-                    {
-                        <li class="media border-bottom border-top p-2">
-                            <div class="mr-3"><span class="fa fa-user-secret"></span></div>
-                            <div class="media-body">
-                                <p class="m-0 text-primary">@Model.Owner.Email  <small class=" text-warning">( Owner )</small></p>
-                            </div>
-                        </li>
-                        foreach (var user in Model.Members)
-                        {
-                            <li class="media border-bottom border-top p-2">
-                                <div class="mr-3"><span class="fas fa-user-tie"></span></div>
-                                <div class="media-body">
-                                    <p class="m-0 text-primary">@user.Email  <small class=" text-warning">( Member )</small></p>
-                                </div>
-                            </li>
-                        }
-
-                        foreach (var user in Model.Invitees)
-                        {
-                            <li class="media border-bottom border-top p-2">
-                                <div class="mr-3"><span class="fas fa-user"></span></div>
-                                <div class="media-body">
-                                    <p class="m-0 text-primary">@user.Email  <small class=" text-warning">( Invitee )</small></p>
-                                </div>
-                            </li>
-                        }
-                    }
-                    else
-                    {
-                        <li>
-                            User Not Authorized To View.
-                        </li>
-                    }
+                    <li class="media border-bottom border-top p-2">
+                        <div class="media-body">
+                        </div>
+                    </li>
+                    <li>
+                    </li>
                 </ul>
             </div>
         </div>
-        <div class="col-3 my-1 mx-auto border-left border-right small">
-            @Html.ActionLink("Create Category", "Join", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
-            <div class="my-2">
-                <h2>Categories</h2>
-                <ul class="list-unstyled">
-                    @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-                    {
-                        @foreach (var cat in Model.Categories)
+        @*<div class="col-7 my-1 mx-auto">
+                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email || Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
+                {
+                    <span class="text-info mx-1">$@Model.BankAccounts.Sum(p => p.Balance)</span>
+                }
+                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                {
+                    @Html.ActionLink("Create Account", "Create", "BankAccounts", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
+                }
+                <div class="my-2">
+                    <h2>Bank Accounts</h2>
+                    <ul class="list-unstyled">
+                        @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
                         {
-                            <li class="media border-bottom border-top p-2">
-                                @cat.Name
-                                <div class="media-body">
-                                    @Html.ActionLink("Edit", "Edit", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
-                                    @Html.ActionLink("Delete", "Delete", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-danger" })
-                                </div>
+                            foreach (var ba in Model.BankAccounts)
+                            {
+                                <li class="media border-bottom border-top p-2">
+                                    @ba.Name
+                                    <small class="ml-2">$@ba.Balance</small>
+                                    <div class="media-body">
+                                        @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                                        {
+                                            @Html.ActionLink("Edit", "Edit", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
+                                            @Html.ActionLink("Delete", "Delete", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-danger" })
+                                        }
+                                    </div>
+                                    <div class="media-body">
+                                        @foreach (var c in ba.Transactions.GroupBy(t => t.CategoryId).ToList())
+                                        {
+                                            <p>
+                                                @c.FirstOrDefault().Category.Name ->> @c.Sum(s => s.Amount)
+                                            </p>
+                                        }
+                                    </div>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li>
+                                User Not Authorized To View.
                             </li>
                         }
-                    }
-                    else
-                    {
-                        <li>
-                            User Not Authorized To View.
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-        <div class="col-3 my-1 mx-auto border-left border-right small">
-            <span class="text-info mx-1">$@Model.BankAccounts.Sum(p => p.Balance)</span>
-            @Html.ActionLink("Create Account", "Create", "BankAccounts", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
+                    </ul>
+                </div>
+            </div>*@<div class="col-7 my-1 mx-auto">
+            <span class="text-info mx-1"></span>
             <div class="my-2">
-                <h2>Bank Accounts</h2>
+                <h2></h2>
                 <ul class="list-unstyled">
-                    @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-                    {
-                        @foreach (var ba in Model.BankAccounts)
-                        {
-                            <li class="media border-bottom border-top p-2">
-                                @ba.Name
-                                <small class="ml-2">$@ba.Balance</small>
-                                <div class="media-body">
-                                    @Html.ActionLink("Edit", "Edit", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
-                                    @Html.ActionLink("Delete", "Delete", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-danger" })
-                                </div>
-                            </li>
-                        }
-                    }
-                    else
-                    {
-                        <li>
-                            User Not Authorized To View.
-                        </li>
-                    }
+                    <li class="media border-bottom border-top p-2">
+                        <small class="ml-2"></small>
+                        <div class="media-body">
+                        </div>
+                        <div class="media-body">
+                            <p>
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                    </li>
                 </ul>
             </div>
         </div>

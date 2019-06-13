@@ -1,0 +1,29 @@
+﻿@model List<CategoryModel>
+
+    <div class="my-2">
+        <h2>Categories</h2>
+        <ul class="list-unstyled">
+            @if (Model.Any())
+            {
+                foreach (var cat in Model)
+                {
+                    <li class="media border-bottom border-top p-2">
+                        @cat.Name
+                        <div class="media-body">
+                            @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                            {
+                                @Html.ActionLink("Edit", "Edit", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
+                                @Html.ActionLink("Delete", "Delete", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-danger" })
+                            }
+                        </div>
+                    </li>
+                }
+            }
+            else
+            {
+                <li>
+                    User Not Authorized To View.
+                </li>
+            }
+        </ul>
+    </div>

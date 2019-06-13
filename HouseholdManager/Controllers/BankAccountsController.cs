@@ -13,7 +13,7 @@ namespace HouseholdManager.Controllers
     public class BankAccountsController : BaseController
     {
         [HttpGet]
-        public ActionResult View(int? id)
+        public ActionResult View(int? id, bool isOwner)
         {
             if (id.HasValue)
             {
@@ -35,6 +35,8 @@ namespace HouseholdManager.Controllers
                     string data = response.Content.ReadAsStringAsync().Result;
 
                     BankAccountModel model = JsonConvert.DeserializeObject<BankAccountModel>(data);
+
+                    ViewBag.IsOwner = isOwner;
 
                     return View(model);
                 }
@@ -153,7 +155,7 @@ namespace HouseholdManager.Controllers
 
                 HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
 
-                HttpResponseMessage response = HttpClient.GetAsync($"{ApiUrl}{CategoryRoute}{id}").Result;
+                HttpResponseMessage response = HttpClient.GetAsync($"{ApiUrl}{BankAccountRoute}{id}").Result;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -199,7 +201,7 @@ namespace HouseholdManager.Controllers
 
                 FormUrlEncodedContent encodedParameters = new FormUrlEncodedContent(parameters);
 
-                HttpResponseMessage response = HttpClient.PutAsync($"{ApiUrl}{CategoryRoute}{formData.Id}", encodedParameters).Result;
+                HttpResponseMessage response = HttpClient.PutAsync($"{ApiUrl}{BankAccountRoute}{formData.Id}", encodedParameters).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -259,13 +261,13 @@ namespace HouseholdManager.Controllers
 
                 HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
 
-                HttpResponseMessage modelResponse = HttpClient.GetAsync($"{ApiUrl}{CategoryRoute}{id}").Result;
+                HttpResponseMessage modelResponse = HttpClient.GetAsync($"{ApiUrl}{BankAccountRoute}{id}").Result;
 
                 string data = modelResponse.Content.ReadAsStringAsync().Result;
 
                 BankAccountModel model = JsonConvert.DeserializeObject<BankAccountModel>(data);
 
-                HttpResponseMessage response = HttpClient.DeleteAsync($"{ApiUrl}{CategoryRoute}{id}").Result;
+                HttpResponseMessage response = HttpClient.DeleteAsync($"{ApiUrl}{BankAccountRoute}{id}").Result;
 
                 if (response.IsSuccessStatusCode)
                 {

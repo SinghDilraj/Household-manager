@@ -40,34 +40,28 @@
                         </tbody>
                     </table>
                 </div>
+                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                {
+                    @Html.ActionLink("Edit Household", "Edit", "Households", new { id = Model.Id }, new { @class = "btn btn-warning mx-1" })
+                    @Html.ActionLink("Delete Household", "Delete", "Households", new { id = Model.Id }, new { @class = "btn btn-danger" })
+                }
             </div>
         </div>
 
-        <div class="col-6 my-4 mx-auto p-2">
+        <div class="col-6 mx-auto my-2">
             @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
             {
-                @Html.ActionLink("Edit Household", "Edit", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-warning mx-1" })
-                @Html.ActionLink("Delete Household", "Delete", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-danger" })
-            }
-
-            <h2 class="my-2">Description</h2>
-            <p>@Model.Description</p>
-        </div>
-
-        <div class="col-6 my-1 mx-auto p-5">
-            @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-            {
-                @Html.ActionLink("Invite User", "InviteUser", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-primary" })
+                @Html.ActionLink("Invite User", "InviteUser", "Households", new { id = Model.Id }, new { @class = "btn btn-primary" })
             }
 
             @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
             {
-                @Html.ActionLink("Leave", "Leave", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-danger" })
+                @Html.ActionLink("Leave", "Leave", "Households", new { id = Model.Id }, new { @class = "btn btn-danger" })
             }
 
             @if (Model.Invitees.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
             {
-                @Html.ActionLink("Join", "Join", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
+                @Html.ActionLink("Join", "Join", "Households", new { id = Model.Id }, new { @class = "btn btn-success" })
             }
 
             <h2 class="my-2">Members</h2>
@@ -100,10 +94,15 @@
             </ul>
         </div>
 
-        <div class="col-6 my-1 mx-auto p-5">
+        <div class="col-6 mx-auto my-4">
+            <h2 class="my-2">Description</h2>
+            <p>@Model.Description</p>
+        </div>
+
+        <div class="col-6 mx-auto my-4">
             @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
             {
-                @Html.ActionLink("Create Category", "Create", "Category", new { HouseholdId = Model.Id }, new { @class = "btn-sm btn-success" })
+                @Html.ActionLink("Create Category", "Create", "Category", new { HouseholdId = Model.Id }, new { @class = "btn btn-success" })
             }
             <div class="my-2">
                 <h2>Categories</h2>
@@ -113,14 +112,14 @@
                         foreach (var cat in Model.Categories)
                         {
                             <li class="media border-bottom border-top p-2">
-                                @cat.Name
-                                <div class="media-body">
-                                    @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-                                    {
-                                        @Html.ActionLink("Edit", "Edit", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
-                                        @Html.ActionLink("Delete", "Delete", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-danger" })
-                                    }
-                                </div>
+                                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                                {
+                                    @Html.ActionLink(cat.Name, "View", "Category", new { id = cat.Id, isOwner = true }, null)
+                                }
+                                else
+                                {
+                                    @Html.ActionLink(cat.Name, "View", "Category", new { id = cat.Id, isOwner = false }, null)
+                                }
                             </li>
                         }
                     }
@@ -134,15 +133,10 @@
             </div>
         </div>
 
-        <div class="col-12 my-1 mx-auto p-5">
-            @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-            {
-                <span class="text-info mx-1">$@Model.BankAccounts.Sum(p => p.Balance)</span>
-            }
-
+        <div class="col-12 my-1 mx-auto">
             @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
             {
-                @Html.ActionLink("Create Account", "Create", "BankAccounts", new { HouseholdId = Model.Id }, new { @class = "btn-sm btn-success" })
+                @Html.ActionLink("Create Account", "Create", "BankAccounts", new { HouseholdId = Model.Id }, new { @class = "btn btn-success" })
             }
             <div class="my-2">
                 <h2>Bank Accounts</h2>
@@ -152,16 +146,16 @@
                         foreach (var ba in Model.BankAccounts)
                         {
                             <li class="media border-bottom border-top p-2">
-                                @ba.Name
+                                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                                {
+                                    @Html.ActionLink(ba.Name, "View", "BankAccounts", new { id = ba.Id, isOwner = true }, null)
+                                }
+                                else
+                                {
+                                    @Html.ActionLink(ba.Name, "View", "BankAccounts", new { id = ba.Id, isOwner = false }, null)
+                                }
                                 <small class="ml-2">$@ba.Balance</small>
-                                <div class="media-body">
-                                    @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-                                    {
-                                        @Html.ActionLink("Edit", "Edit", "BankAccounts", new { id = ba.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
-                                        @Html.ActionLink("Delete", "Delete", "BankAccounts", new { id = ba.Id }, new { @class = "btn-sm btn-danger" })
-                                    }
-                                </div>
-                                <div>
+                                @*<div class="media-body">
                                     @foreach (var g in ba.Transactions.GroupBy(t => t.CategoryId))
                                     {
                                         foreach (var t in g)
@@ -169,7 +163,7 @@
                                             <span class="text-info">@t.Category.Name $@g.Sum(c => c.Amount)</span>
                                         }
                                     }
-                                </div>
+                                </div>*@
                             </li>
                         }
                     }

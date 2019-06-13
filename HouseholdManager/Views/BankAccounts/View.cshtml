@@ -1,8 +1,110 @@
-﻿@model  CategoryModel
+﻿@model  BankAccountModel
 <div class="container">
-    <div class="row">
-        <div class="col-12">
-            @Model.Name
+    <div class="row text-center">
+        <div class="col-12 mx-auto text-center text-primary my-4">
+            <h1>Bank Account</h1>
+            <hr />
+        </div>
+        <div class="col-12 mx-auto">
+            @if (ViewBag.IsOwner)
+            {
+                @Html.ActionLink("Create Account", "Create", "BankAccounts", new { HouseholdId = Model.Id }, new { @class = "btn btn-success" })
+            }
+        </div>
+        <div class="col-6 mx-auto">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-responsive table-bordered table-striped display">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tfoot class="thead-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                                <th>Balance</th>
+                            </tr>
+                        </tfoot>
+                        <tbody class="text-primary">
+                            <tr>
+                                <td>@Model.Name</td>
+                                <td>@Model.Created</td>
+                                @if (Model.Updated.HasValue)
+                                {
+                                    <td>@Model.Updated</td>
+                                }
+                                else
+                                {
+                                    <td>never</td>
+                                }
+                                <td>
+                                    $@Model.Balance
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 my-3">
+            @if (ViewBag.IsOwner)
+            {
+                @Html.ActionLink("Edit", "Edit", "BankAccounts", new { id = Model.Id }, new { @class = "btn btn-warning ml-3 mr-1" })
+                @Html.ActionLink("Delete", "Delete", "BankAccounts", new { id = Model.Id }, new { @class = "btn btn-danger" })
+            }
+            <h2 class="my-2 text-info">Description</h2>
+            <p>@Model.Description</p>
+            <hr />
+        </div>
+        <div class="col-6 my-2 mx-auto">
+            <h2 class="my-3 text-info">Transactions</h2>
+            <div class="card-body">
+                <div>
+                    @Html.ActionLink("Create", "Create", "Transactions", new { id = Model.Id }, new { @class = "btn btn-success" })
+                </div>
+                <div class="table-responsive my-3">
+                    <table class="table table-responsive table-bordered table-striped display">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                            </tr>
+                        </thead>
+                        <tfoot class="thead-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                            </tr>
+                        </tfoot>
+                        <tbody class="text-primary">
+                            @foreach (var tr in Model.Transactions)
+                            {
+                                <tr>@tr.Title</tr>
+                                <tr>@tr.Amount</tr>
+                                <tr>@tr.Category.Name</tr>
+                                <tr>@tr.Created</tr>
+                                if (tr.Updated.HasValue)
+                                {
+                                    <tr>@tr.Updated</tr>
+                                }
+                                else
+                                {
+                                    <tr>never</tr>
+                                }
+                                <tr>@tr.Initiated</tr>
+                                <tr>@tr.IsVoid</tr>
+                            }
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

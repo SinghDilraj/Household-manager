@@ -13,6 +13,45 @@ namespace HouseholdManager.Controllers
     public class CategoryController : BaseController
     {
         [HttpGet]
+        public ActionResult View(int? id, bool isOwner)
+        {
+            if (id.HasValue)
+            {
+                HttpCookie cookie = Request.Cookies["Token"];
+
+                if (cookie == null)
+                {
+                    return RedirectToAction(nameof(AccountController.Login), "Account");
+                }
+
+                string token = cookie.Value;
+
+                HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
+
+                HttpResponseMessage response = HttpClient.GetAsync($"{ApiUrl}{CategoryRoute}{id}").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = response.Content.ReadAsStringAsync().Result;
+
+                    CategoryModel model = JsonConvert.DeserializeObject<CategoryModel>(data);
+
+                    ViewBag.IsOwner = isOwner;
+
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds), "Households");
+                }
+            }
+            else
+            {
+                return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds), "Households");
+            }
+        }
+
+        [HttpGet]
         public ActionResult Create(int? HouseholdId)
         {
             if (HouseholdId.HasValue)

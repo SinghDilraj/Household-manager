@@ -239,11 +239,12 @@
     <Content Include="Views\BankAccounts\Create.cshtml" />
     <Content Include="Views\BankAccounts\Edit.cshtml" />
     <Content Include="Views\BankAccounts\View.cshtml" />
+    <Content Include="Views\Category\View.cshtml" />
+    <Content Include="Views\Transactions\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\Transactions\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

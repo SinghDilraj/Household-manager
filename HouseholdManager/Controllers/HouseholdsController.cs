@@ -329,8 +329,7 @@ namespace HouseholdManager.Controllers
 
                 if (cookie == null)
                 {
-                    //ModelState.AddModelError("", "Unauthorized request.");
-                    return RedirectToAction(nameof(HouseholdsController.GetHousehold), new { id });
+                    return RedirectToAction(nameof(AccountController.Login), "Account");
                 }
 
                 string token = cookie.Value;
@@ -355,8 +354,7 @@ namespace HouseholdManager.Controllers
 
                 if (cookie == null)
                 {
-                    //ModelState.AddModelError("", "Unauthorized request.");
-                    return RedirectToAction(nameof(HouseholdsController.GetHousehold), new { id });
+                    return RedirectToAction(nameof(AccountController.Login), "Account");
                 }
 
                 string token = cookie.Value;

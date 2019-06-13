@@ -234,12 +234,12 @@
     <Content Include="Views\Households\GetAllHouseholds.cshtml" />
     <Content Include="Views\Households\Edit.cshtml" />
     <Content Include="Views\Households\InviteUser.cshtml" />
+    <Content Include="Views\Category\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\BankAccounts\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\Category\" />
     <Folder Include="Views\Transactions\" />
   </ItemGroup>
   <ItemGroup>

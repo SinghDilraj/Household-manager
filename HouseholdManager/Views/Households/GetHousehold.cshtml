@@ -43,20 +43,18 @@
             </div>
         </div>
 
-
-
-        <div class="col-6 my-4 mx-auto">
+        <div class="col-6 my-4 mx-auto p-2">
             @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
             {
                 @Html.ActionLink("Edit Household", "Edit", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-warning mx-1" })
                 @Html.ActionLink("Delete Household", "Delete", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-danger" })
             }
 
-            <h2>Description</h2>
+            <h2 class="my-2">Description</h2>
             <p>@Model.Description</p>
         </div>
 
-        <div class="col-6 my-1 mx-auto">
+        <div class="col-6 my-1 mx-auto p-5">
             @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
             {
                 @Html.ActionLink("Invite User", "InviteUser", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-primary" })
@@ -72,24 +70,24 @@
                 @Html.ActionLink("Join", "Join", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
             }
 
-            <h2>Members</h2>
+            <h2 class="my-2">Members</h2>
             <ul class="list-unstyled">
                 @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
                 {
                     <li class="media border-bottom border-top p-2">
-                        @Model.Owner.Email <span class="text-danger">( Owner )</span>
+                        @Model.Owner.Email  <span class="text-danger"> ( Owner )</span>
                     </li>
                     foreach (var member in Model.Members)
                     {
                         <li class="media border-bottom border-top p-2">
-                            @member.Email <span class="text-warning">( Member )</span>
+                            @member.Email  <span class="text-warning"> ( Member )</span>
                         </li>
                     }
 
                     foreach (var invitee in Model.Invitees)
                     {
                         <li class="media border-bottom border-top p-2">
-                            @invitee.Email <span class="text-primary">( Invitee )</span>
+                            @invitee.Email  <span class="text-primary"> ( Invitee )</span>
                         </li>
                     }
                 }
@@ -102,10 +100,10 @@
             </ul>
         </div>
 
-        <div class="col-6 my-1 mx-auto">
+        <div class="col-6 my-1 mx-auto p-5">
             @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
             {
-                @Html.ActionLink("Create Category", "Join", "Households", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
+                @Html.ActionLink("Create Category", "Create", "Category", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
             }
             <div class="my-2">
                 <h2>Categories</h2>
@@ -136,8 +134,7 @@
             </div>
         </div>
 
-
-        <div class="col-3 my-1 mx-auto border-left border-right small">
+        <div class="col-12 my-1 mx-auto p-5">
             <span class="text-info mx-1">$@Model.BankAccounts.Sum(p => p.Balance)</span>
             @Html.ActionLink("Create Account", "Create", "BankAccounts", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
             <div class="my-2">
@@ -145,7 +142,7 @@
                 <ul class="list-unstyled">
                     @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
                     {
-                        @foreach (var ba in Model.BankAccounts)
+                        foreach (var ba in Model.BankAccounts)
                         {
                             <li class="media border-bottom border-top p-2">
                                 @ba.Name
@@ -153,6 +150,15 @@
                                 <div class="media-body">
                                     @Html.ActionLink("Edit", "Edit", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
                                     @Html.ActionLink("Delete", "Delete", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-danger" })
+                                </div>
+                                <div>
+                                    @foreach (var g in ba.Transactions.GroupBy(t => t.CategoryId))
+                                    {
+                                        foreach (var t in g)
+                                        {
+                                            <span class="text-info">@t.Category.Name $@g.Sum(c => c.Amount)</span>
+                                        }
+                                    }
                                 </div>
                             </li>
                         }

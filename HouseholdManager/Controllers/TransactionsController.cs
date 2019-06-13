@@ -14,9 +14,8 @@ namespace HouseholdManager.Controllers
     public class TransactionsController : BaseController
     {
         [HttpGet]
-        public ActionResult View(int? id, bool isOwner)
+        public ActionResult View(int? id)
         {
-            ViewBag.IsOwner = isOwner;
             return View();
         }
 

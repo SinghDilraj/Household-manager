@@ -1,5 +1,4 @@
 ﻿using HouseholdManager.Models;
-using HouseholdManager.Models.Category;
 using HouseholdManager.Models.Households;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -65,66 +64,6 @@ namespace HouseholdManager.Controllers
             List<HouseholdModel> viewModels = JsonConvert.DeserializeObject<List<HouseholdModel>>(data);
 
             return View(viewModels);
-        }
-
-        [HttpGet]
-        public ActionResult Members(int? id)
-        {
-            if (id.HasValue)
-            {
-                HttpCookie cookie = Request.Cookies["Token"];
-
-                if (cookie == null)
-                {
-                    return RedirectToAction(nameof(AccountController.Login), "Account");
-                }
-
-                string token = cookie.Value;
-
-                HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
-
-                HttpResponseMessage response = HttpClient.GetAsync($"{ApiUrl}{HouseholdRoute}Users/{id}").Result;
-
-                string data = response.Content.ReadAsStringAsync().Result;
-
-                HouseholdMembersModel viewModels = JsonConvert.DeserializeObject<HouseholdMembersModel>(data);
-
-                return PartialView("_Members", viewModels);
-            }
-            else
-            {
-                return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds));
-            }
-        }
-
-        [HttpGet]
-        public ActionResult Categories(int? id)
-        {
-            if (id.HasValue)
-            {
-                HttpCookie cookie = Request.Cookies["Token"];
-
-                if (cookie == null)
-                {
-                    return RedirectToAction(nameof(AccountController.Login), "Account");
-                }
-
-                string token = cookie.Value;
-
-                HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
-
-                HttpResponseMessage response = HttpClient.GetAsync($"{ApiUrl}{HouseholdRoute}Categories/{id}").Result;
-
-                string data = response.Content.ReadAsStringAsync().Result;
-
-                List<CategoryModel> viewModels = JsonConvert.DeserializeObject<List<CategoryModel>>(data);
-
-                return PartialView("_Categories", viewModels);
-            }
-            else
-            {
-                return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds));
-            }
         }
 
         [HttpGet]

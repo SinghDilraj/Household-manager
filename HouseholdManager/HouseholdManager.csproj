@@ -234,8 +234,6 @@
     <Content Include="Views\Households\GetAllHouseholds.cshtml" />
     <Content Include="Views\Households\Edit.cshtml" />
     <Content Include="Views\Households\InviteUser.cshtml" />
-    <Content Include="Views\Households\_Members.cshtml" />
-    <Content Include="Views\Households\_Categories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

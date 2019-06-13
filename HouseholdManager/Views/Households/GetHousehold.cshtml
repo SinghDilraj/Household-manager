@@ -103,76 +103,54 @@
             <div class="my-2">
                 <h2></h2>
                 <ul class="list-unstyled">
-                    <li class="media border-bottom border-top p-2">
-                        <div class="media-body">
-                        </div>
-                    </li>
-                    <li>
-                    </li>
+                    @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                    {
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <li class="media border-bottom border-top p-2">
+                                @cat.Name
+                                <div class="media-body">
+                                    @Html.ActionLink("Edit", "Edit", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
+                                    @Html.ActionLink("Delete", "Delete", "Category", new { id = cat.Id }, new { @class = "btn-sm btn-danger" })
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li>
+                            User Not Authorized To View.
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
-        @*<div class="col-7 my-1 mx-auto">
-                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email || Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value))
-                {
-                    <span class="text-info mx-1">$@Model.BankAccounts.Sum(p => p.Balance)</span>
-                }
-                @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-                {
-                    @Html.ActionLink("Create Account", "Create", "BankAccounts", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
-                }
-                <div class="my-2">
-                    <h2>Bank Accounts</h2>
-                    <ul class="list-unstyled">
-                        @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+        <div class="col-3 my-1 mx-auto border-left border-right small">
+            <span class="text-info mx-1">$@Model.BankAccounts.Sum(p => p.Balance)</span>
+            @Html.ActionLink("Create Account", "Create", "BankAccounts", new { id = Model.Id }, new { @class = "btn-sm btn-success" })
+            <div class="my-2">
+                <h2>Bank Accounts</h2>
+                <ul class="list-unstyled">
+                    @if (Model.Members.Any(p => p.Email == Request.Cookies["UserName"]?.Value) || Request.Cookies["UserName"]?.Value == Model.Owner.Email)
+                    {
+                        @foreach (var ba in Model.BankAccounts)
                         {
-                            foreach (var ba in Model.BankAccounts)
-                            {
-                                <li class="media border-bottom border-top p-2">
-                                    @ba.Name
-                                    <small class="ml-2">$@ba.Balance</small>
-                                    <div class="media-body">
-                                        @if (Request.Cookies["UserName"]?.Value == Model.Owner.Email)
-                                        {
-                                            @Html.ActionLink("Edit", "Edit", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
-                                            @Html.ActionLink("Delete", "Delete", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-danger" })
-                                        }
-                                    </div>
-                                    <div class="media-body">
-                                        @foreach (var c in ba.Transactions.GroupBy(t => t.CategoryId).ToList())
-                                        {
-                                            <p>
-                                                @c.FirstOrDefault().Category.Name ->> @c.Sum(s => s.Amount)
-                                            </p>
-                                        }
-                                    </div>
-                                </li>
-                            }
-                        }
-                        else
-                        {
-                            <li>
-                                User Not Authorized To View.
+                            <li class="media border-bottom border-top p-2">
+                                @ba.Name
+                                <small class="ml-2">$@ba.Balance</small>
+                                <div class="media-body">
+                                    @Html.ActionLink("Edit", "Edit", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-warning ml-3 mr-1" })
+                                    @Html.ActionLink("Delete", "Delete", "Category", new { id = ba.Id }, new { @class = "btn-sm btn-danger" })
+                                </div>
                             </li>
                         }
-                    </ul>
-                </div>
-            </div>*@<div class="col-7 my-1 mx-auto">
-            <span class="text-info mx-1"></span>
-            <div class="my-2">
-                <h2></h2>
-                <ul class="list-unstyled">
-                    <li class="media border-bottom border-top p-2">
-                        <small class="ml-2"></small>
-                        <div class="media-body">
-                        </div>
-                        <div class="media-body">
-                            <p>
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                    </li>
+                    }
+                    else
+                    {
+                        <li>
+                            User Not Authorized To View.
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

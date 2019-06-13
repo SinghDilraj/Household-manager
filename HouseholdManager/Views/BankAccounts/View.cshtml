@@ -66,42 +66,34 @@
             <h2 class="my-3 text-info">Transactions</h2>
             <div class="card-body">
                 <div>
-                    @Html.ActionLink("Create", "Create", "Transactions", new { id = Model.Id }, new { @class = "btn btn-success" })
+                    @Html.ActionLink("Create", "Create", "Transactions", new { bankAccountId = Model.Id, HouseholdId = Model.HouseholdId }, new { @class = "btn btn-success" })
                 </div>
                 <div class="table-responsive my-3">
                     <table class="table table-responsive table-bordered table-striped display">
                         <thead class="thead-dark">
                             <tr>
-                                <th>Name</th>
+                                <th>Title</th>
+                                <th>Amount ($)</th>
                                 <th>Created</th>
-                                <th>Updated</th>
                             </tr>
                         </thead>
                         <tfoot class="thead-dark">
                             <tr>
-                                <th>Name</th>
+                                <th>Title</th>
+                                <th>Amount ($)</th>
                                 <th>Created</th>
-                                <th>Updated</th>
                             </tr>
                         </tfoot>
                         <tbody class="text-primary">
                             @foreach (var tr in Model.Transactions)
                             {
-                                <tr>@tr.Title</tr>
-                                <tr>@tr.Amount</tr>
-                                <tr>@tr.Category.Name</tr>
-                                <tr>@tr.Created</tr>
-                                if (tr.Updated.HasValue)
-                                {
-                                    <tr>@tr.Updated</tr>
-                                }
-                                else
-                                {
-                                    <tr>never</tr>
-                                }
-                                <tr>@tr.Initiated</tr>
-                                <tr>@tr.IsVoid</tr>
+                                <tr>
+                                    <td>@Html.ActionLink(tr.Title, "View", "Transactions", new { id = tr.Id }, new { @class="text-danger"})</td>
+                                    <td>@tr.Amount</td>
+                                    <td>@tr.Created</td>
+                                </tr>
                             }
+                        </tbody>
                     </table>
                 </div>
             </div>

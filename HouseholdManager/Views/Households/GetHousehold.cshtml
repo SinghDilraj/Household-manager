@@ -155,7 +155,7 @@
                                     @Html.ActionLink(ba.Name, "View", "BankAccounts", new { id = ba.Id, isOwner = false }, null)
                                 }
                                 <small class="ml-2">$@ba.Balance</small>
-                                @*<div class="media-body">
+                                <div class="media-body">
                                     @foreach (var g in ba.Transactions.GroupBy(t => t.CategoryId))
                                     {
                                         foreach (var t in g)
@@ -163,7 +163,7 @@
                                             <span class="text-info">@t.Category.Name $@g.Sum(c => c.Amount)</span>
                                         }
                                     }
-                                </div>*@
+                                </div>
                             </li>
                         }
                     }

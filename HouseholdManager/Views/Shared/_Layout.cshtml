@@ -28,18 +28,18 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown mx-1 my-1">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Bank Accounts <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            @Html.ActionLink("Create", "Create", "BankAccounts", null, new { @class = "dropdown-item" })
-                            @Html.ActionLink("View All", "GetAllBankAccounts", "BankAccounts", null, new { @class = "dropdown-item" })
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown mx-1 my-1">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Account <span class="caret"></span>
-                        </button>
+                        @if (string.IsNullOrEmpty(Request.Cookies["Token"]?.Value))
+                        {
+                            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Account <span class="caret"></span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Account <span class="caret"></span>
+                            </button>
+                        }
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             @if (string.IsNullOrEmpty(Request.Cookies["Token"]?.Value))
                             {

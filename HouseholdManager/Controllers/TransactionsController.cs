@@ -271,7 +271,7 @@ namespace HouseholdManager.Controllers
 
                 FormUrlEncodedContent encodedParameters = new FormUrlEncodedContent(parameters);
 
-                HttpResponseMessage response = HttpClient.PostAsync($"{ApiUrl}{TransactionRoute}", encodedParameters).Result;
+                HttpResponseMessage response = HttpClient.PutAsync($"{ApiUrl}{TransactionRoute}", encodedParameters).Result;
 
                 if (response.IsSuccessStatusCode)
                 {

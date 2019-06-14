@@ -275,7 +275,7 @@ namespace HouseholdManager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction(nameof(BankAccountsController.View), "BankAccounts", new { id = formData.BankAccountId, isOwner = true });
+                    return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds), "Households", new { id = householdId });
                 }
                 else
                 {
@@ -351,12 +351,49 @@ namespace HouseholdManager.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-
-                    return RedirectToAction(nameof(BankAccountsController.View), "BankAccounts", new { id = model.BankAccountId });
+                    return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds), "Households", new { id = model.Category.HouseholdId });
                 }
                 else
                 {
-                    return RedirectToAction(nameof(BankAccountsController.View), "BankAccounts", new { id = model.BankAccountId });
+                    return RedirectToAction(nameof(HouseholdsController.GetHousehold), "Households", new { id = model.Category.HouseholdId });
+                }
+            }
+            else
+            {
+                return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds), "Households");
+            }
+        }
+
+        public ActionResult Void(int? id)
+        {
+            if (id.HasValue)
+            {
+                HttpCookie cookie = Request.Cookies["Token"];
+
+                if (cookie == null)
+                {
+                    return RedirectToAction(nameof(AccountController.Login), "Account");
+                }
+
+                string token = cookie.Value;
+
+                HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
+
+                HttpResponseMessage modelResponse = HttpClient.GetAsync($"{ApiUrl}{TransactionRoute}{id}").Result;
+
+                string data = modelResponse.Content.ReadAsStringAsync().Result;
+
+                TransactionModel model = JsonConvert.DeserializeObject<TransactionModel>(data);
+
+                HttpResponseMessage response = HttpClient.PostAsync($"{ApiUrl}{TransactionRoute}Void/{id}?Void=true", null).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds), "Households", new { id = model.Category.HouseholdId });
+                }
+                else
+                {
+                    return RedirectToAction(nameof(HouseholdsController.GetHousehold), "Households", new { id = model.Category.HouseholdId });
                 }
             }
             else

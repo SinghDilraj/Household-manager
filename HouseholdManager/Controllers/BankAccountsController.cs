@@ -246,6 +246,45 @@ namespace HouseholdManager.Controllers
             }
         }
 
+        public ActionResult UpdateBalance(int? id)
+        {
+            if (id.HasValue)
+            {
+                HttpCookie cookie = Request.Cookies["Token"];
+
+                if (cookie == null)
+                {
+                    return RedirectToAction(nameof(AccountController.Login), "Account");
+                }
+
+                string token = cookie.Value;
+
+                HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
+
+                HttpResponseMessage modelResponse = HttpClient.GetAsync($"{ApiUrl}{BankAccountRoute}{id}").Result;
+
+                string data = modelResponse.Content.ReadAsStringAsync().Result;
+
+                BankAccountModel model = JsonConvert.DeserializeObject<BankAccountModel>(data);
+
+                HttpResponseMessage response = HttpClient.PostAsync($"{ApiUrl}{BankAccountRoute}UpdateBalance/{id}", null).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+
+                    return RedirectToAction(nameof(HouseholdsController.GetHousehold), "Households", new { id = model.HouseholdId });
+                }
+                else
+                {
+                    return RedirectToAction(nameof(HouseholdsController.GetHousehold), "Households", new { id = model.HouseholdId });
+                }
+            }
+            else
+            {
+                return RedirectToAction(nameof(HouseholdsController.GetAllHouseholds), "Households");
+            }
+        }
+
         public ActionResult Delete(int? id)
         {
             if (id.HasValue)

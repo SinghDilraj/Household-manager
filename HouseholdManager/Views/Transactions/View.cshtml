@@ -62,6 +62,7 @@
             {
                 @Html.ActionLink("Edit", "Edit", "Transactions", new { id = Model.Id }, new { @class = "btn btn-warning ml-3 mr-1" })
                 @Html.ActionLink("Delete", "Delete", "Transactions", new { id = Model.Id }, new { @class = "btn btn-danger" })
+                @Html.ActionLink("Void", "Void", "Transactions", new { id = Model.Id }, new { @class = "btn btn-warning" })
             }
 
             <h2 class="my-4 text-info">Description</h2>

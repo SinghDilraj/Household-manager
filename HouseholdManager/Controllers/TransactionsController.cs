@@ -271,7 +271,7 @@ namespace HouseholdManager.Controllers
 
                 FormUrlEncodedContent encodedParameters = new FormUrlEncodedContent(parameters);
 
-                HttpResponseMessage response = HttpClient.PutAsync($"{ApiUrl}{TransactionRoute}", encodedParameters).Result;
+                HttpResponseMessage response = HttpClient.PutAsync($"{ApiUrl}{TransactionRoute}{formData.Id}", encodedParameters).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -309,7 +309,7 @@ namespace HouseholdManager.Controllers
 
                     HttpResponseMessage responsea = HttpClient.GetAsync($"{ApiUrl}{HouseholdRoute}Categories/{householdId}").Result;
 
-                    string dataa = response.Content.ReadAsStringAsync().Result;
+                    string dataa = responsea.Content.ReadAsStringAsync().Result;
 
                     List<CategoryModel> modela = JsonConvert.DeserializeObject<List<CategoryModel>>(dataa);
 

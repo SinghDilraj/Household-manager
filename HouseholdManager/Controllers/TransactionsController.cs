@@ -307,6 +307,16 @@ namespace HouseholdManager.Controllers
                         ModelState.AddModelError("", response.ReasonPhrase);
                     }
 
+                    HttpResponseMessage responsea = HttpClient.GetAsync($"{ApiUrl}{HouseholdRoute}Categories/{householdId}").Result;
+
+                    string dataa = response.Content.ReadAsStringAsync().Result;
+
+                    List<CategoryModel> modela = JsonConvert.DeserializeObject<List<CategoryModel>>(dataa);
+
+                    SelectList categories = new SelectList(modela, "Id", "Name");
+
+                    ViewData["Categories"] = categories;
+
                     return View(formData);
                 }
             }
